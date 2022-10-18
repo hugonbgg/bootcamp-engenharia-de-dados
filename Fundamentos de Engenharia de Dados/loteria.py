@@ -1,6 +1,7 @@
 from importlib.machinery import DEBUG_BYTECODE_SUFFIXES
 import pandas as pd
 import requests
+import collections
 
 modalidade = 'Lotofacil'
 url = 'https://servicebus2.caixa.gov.br/portaldeloterias/api/resultados?modalidade='+ modalidade
@@ -21,7 +22,7 @@ type(df)
 type(df[0])
 df = df[0].copy()
 df
-df[df['Bola1'] == df['Bola1']] #para remover os nulos, que são as linhas em branco dos dados originais
+df = df[df['Bola1'] == df['Bola1']] #para remover os nulos, que são as linhas em branco dos dados originais
 
 ####Análise de dados
 #Cria a lista da população, pares, impares e primos
@@ -30,6 +31,10 @@ np_pop = list(range(1, 26))
 n_pares = list(range(2,25,2))
 n_impares = list(range(1,26,2))
 nr_primos = [2, 3, 5, 7, 11, 13, 17, 19, 23]
+
+n_pares
+n_impares
+nr_primos
 
 comb = [] #Combinação de pares e impares
 
@@ -158,6 +163,12 @@ freq_nr = [
     [25, v_25]
 ]
 
-#Organizando os valores
+#Organizando os valores do mais frequente para o menos
 freq_nr.sort(key=lambda tup:tup[1])
 freq_nr
+
+#Contando as combinações
+counter = collections.Counter(comb)
+counter
+
+df
