@@ -80,7 +80,7 @@ for index, row in df.iterrows():
         if row[campo] in n_impares:
             v_impares += 1
         if row[campo] in nr_primos:
-            v_pares += 1
+            v_primos += 1
         if row[campo] == 1:
                 v_01 += 1
         if row[campo] == 2:
@@ -170,5 +170,3 @@ freq_nr
 #Contando as combinações
 counter = collections.Counter(comb)
 counter
-
-df
