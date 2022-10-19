@@ -2,10 +2,17 @@ from importlib.machinery import DEBUG_BYTECODE_SUFFIXES
 import pandas as pd
 import requests
 import collections
+import sys
 
-modalidade = 'Lotofacil'
-url = 'https://servicebus2.caixa.gov.br/portaldeloterias/api/resultados?modalidade='+ modalidade
-print(url)
+#comentei para add o link direto ao executar o script ficando:
+
+##python loteria.py link da url da caixa
+
+#modalidade = 'Lotofacil'
+#url = 'https://servicebus2.caixa.gov.br/portaldeloterias/api/resultados?modalidade='+ modalidade
+#print(url)
+
+url = sys.argv[1]
 
 r = requests.get(url, verify = False)
 r.text
