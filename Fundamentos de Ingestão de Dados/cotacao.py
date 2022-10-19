@@ -33,4 +33,4 @@ dolar# %%
 print(f"20 doláres hoje ({dolar['create_date'][:10]}) custam {round(float(dolar['bid']) * 20, 2)} reais")
 
 # %%
-
+#Salvando o codigo em uma função
