@@ -163,10 +163,31 @@ freq_nr = [
     [25, v_25]
 ]
 
-#Organizando os valores do mais frequente para o menos
-freq_nr.sort(key=lambda tup:tup[1])
+#Organizando os valores do menos frequente para o mais
+freq_nr.sort(key=lambda tup: tup[1])
 freq_nr
+freq_nr[0] # menos frequente
+freq_nr[-1] #mais frequente
 
 #Contando as combinações
 counter = collections.Counter(comb)
 counter
+
+#Salvando os resultados da contagem em um dataframe
+resultado = pd.DataFrame(counter.items(), columns=['Combinacao', 'Frequencia'])
+resultado
+
+resultado['pct_freq'] = resultado['Frequencia']/resultado['Frequencia'].sum() #calcula a porcetagem
+resultado['pct_freq'] = resultado['pct_freq'] * 100 #converte por 100 para deixar de 0 a 100%
+resultado['pct_freq'] = resultado['pct_freq'].round(2) #deixa apenas duas casas decimais
+resultado = resultado.sort_values(by = 'pct_freq', ascending= False) #Organiza do mais frequente para o menos frequente
+resultado
+
+#Exibindo o resultado formatado
+print('''
+        O número mais frequente é o: {}
+        O número menos frequente é o: {}
+        A combinação de pares, impares e primos mais frequente é: {} com a frequencia de {}%
+        '''.format(freq_nr[-1][0], freq_nr[0][0], resultado['Combinacao'].values[0], resultado['pct_freq'].values[0])
+        )
+
