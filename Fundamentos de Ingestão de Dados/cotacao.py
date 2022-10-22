@@ -1,5 +1,6 @@
 #%%
 #imports
+from logging import exception
 import requests
 import json
 
@@ -43,7 +44,7 @@ def cotacao(qtd, moeda):
         {qtd} {moeda[:3]} custam hoje {float(moeda_cotacao['bid']).__round__(3) * qtd} {moeda[4:]}. 
         A cotação máxima do dia foi {float(moeda_cotacao['high']).__round__(2)} {moeda[4:]} e a minima {float(moeda_cotacao['low']).__round__(2)} {moeda[4:]}.
         ''')
-    print(moeda_cotacao)
+    #print(moeda_cotacao)
  
 #%%
 cotacao(1,'USD-BRL')
@@ -54,5 +55,68 @@ cotacao(1, 'JPY-BRL')
 
 # %%
 #Simulando um erro
+#a moeda hugo não existe
 cotacao(20, 'Hugo')
+
+# %%
+#exemplo para imprimir apenas o erro
+try:
+    10/0
+except Exception as e:
+    print(e)
+else:
+    print("Ok")
+# %%
+try:
+    10/2
+except Exception as e:
+    print(e)
+else:
+    print("Ok")
+
+# %%
+try:
+    cotacao(20, 'Hugo')
+except Exception as e:
+    print(e)
+else:
+    print("Ok")
+# %%
+try:
+    cotacao(20, 'JPY-BRL')
+except Exception as e:
+    print(e)
+else:
+    print("Ok")
+
+# %%
+#Rodando uma lista de moedas
+lst_moedas = [
+    'USD-BRL',
+    'EUR-BRL',
+    'BTC-BRL',
+    'JPY-BRL',
+    'RPL-BRL' #Essa moeda não existe
+]
+
+# %%
+for moeda in lst_moedas:
+    cotacao(1, moeda)
+    
+
+# %%
+#desse modo ignora a moeda com erro
+for moeda in lst_moedas:
+    try:
+        cotacao(1, moeda)
+    except:
+        pass
+# %%
+for moeda in lst_moedas:
+    try:
+        cotacao(1, moeda)
+    except:
+        print(f" Falha na moeda {moeda}")
+
+
 # %%
