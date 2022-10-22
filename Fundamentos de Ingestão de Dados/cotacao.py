@@ -1,6 +1,7 @@
 #%%
 #imports
 from logging import exception
+from numpy import inner
 import requests
 import json
 
@@ -96,8 +97,8 @@ lst_moedas = [
     'EUR-BRL',
     'BTC-BRL',
     'JPY-BRL',
-    'RPL-BRL' #Essa moeda não existe
-]
+    'RPL-BRL' 
+] #RPL-BRL Essa moeda não existe
 
 # %%
 for moeda in lst_moedas:
@@ -118,5 +119,47 @@ for moeda in lst_moedas:
     except:
         print(f" Falha na moeda {moeda}")
 
+
+# %%
+#Criando uma função multi moeda
+def multi_moeda(valor):
+    lst_moedas = [
+        'USD-BRL',
+        'EUR-BRL',
+        'BTC-BRL',
+        'JPY-BRL',
+        'RPL-BRL' 
+    ]
+
+    for moeda in lst_moedas:
+        cotacao(valor, moeda)
+
+# %%
+multi_moeda(20)
+# %%
+#usando decoretors para checar as funções
+
+def error_check(func):
+    def inner_func(*args, **kargs):
+        try:
+            func(*args, **kargs)
+        except:
+            print(f"{func.__name__} {moeda} falhou!")
+    return inner_func
+
+# %%
+@error_check
+def multi_moeda(valor):
+    lst_moedas = [
+        'USD-BRL',
+        'EUR-BRL',
+        'BTC-BRL',
+        'JPY-BRL',
+        'RPL-BRL' 
+    ]
+
+    for moeda in lst_moedas:
+        cotacao(valor, moeda)
+multi_moeda(1)# %%
 
 # %%
