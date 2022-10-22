@@ -163,3 +163,47 @@ def multi_moeda(valor):
 multi_moeda(1)# %%
 
 # %%
+#simulando uma api
+import backoff
+import random
+
+def test_func(*args, **kargs):
+    rnd = random.randint(100, 1000)
+    print(f"""
+            RND: {rnd}
+            args: {args if args else 'sem args'}
+            kargs: {kargs if kargs else 'sem kargs'}
+        """)
+    if rnd < 200:
+        raise ConnectionAbortedError('Conexão foi finalizada')
+    elif rnd < 400:
+        raise ConnectionRefusedError('Conexão foi recusada')
+    elif rnd < 600:
+        raise TimeoutError('Tempo de espera excedido')
+    else:
+        return "OK!"
+
+# %%
+test_func()
+# %%
+#Simulando a API e usando o backoff
+@backoff.on_exception(backoff.expo, (ConnectionAbortedError, ConnectionRefusedError, TimeoutError), max_tries=10)
+def test_func(*args, **kargs):
+    rnd = random.randint(100, 1000)
+    print(f"""
+            RND: {rnd}
+            args: {args if args else 'sem args'}
+            kargs: {kargs if kargs else 'sem kargs'}
+        """)
+    if rnd < 200:
+        raise ConnectionAbortedError('Conexão foi finalizada')
+    elif rnd < 400:
+        raise ConnectionRefusedError('Conexão foi recusada')
+    elif rnd < 600:
+        raise TimeoutError('Tempo de espera excedido')
+    else:
+        return "OK!"
+
+test_func()# %%
+
+# %%
