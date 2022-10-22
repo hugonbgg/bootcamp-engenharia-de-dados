@@ -40,16 +40,19 @@ def cotacao(qtd, moeda):
     ret = requests.get(url)
     moeda_cotacao = json.loads(ret.text)[moeda.replace('-','')]
     print(f'''
-        {qtd} {moeda[:3]} custam hoje {round(float(moeda_cotacao['bid']) * 20)} {moeda[4:]}. 
+        {qtd} {moeda[:3]} custam hoje {float(moeda_cotacao['bid']).__round__(3) * qtd} {moeda[4:]}. 
         A cotação máxima do dia foi {float(moeda_cotacao['high']).__round__(2)} {moeda[4:]} e a minima {float(moeda_cotacao['low']).__round__(2)} {moeda[4:]}.
         ''')
     print(moeda_cotacao)
  
 #%%
-cotacao(20,'USD-BRL')
+cotacao(1,'USD-BRL')
 
 
 # %%
+cotacao(1, 'JPY-BRL')
 
-
+# %%
+#Simulando um erro
+cotacao(20, 'Hugo')
 # %%
