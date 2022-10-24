@@ -9,6 +9,7 @@ requests = "*"
 lxml = "*"
 ipykernel = "*"
 backoff = "*"
+bs4 = "*"
 
 [dev-packages]
 
