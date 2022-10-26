@@ -1,4 +1,5 @@
 #%%
+#import Dos requisitos
 from webbrowser import get
 import requests
 import pandas as pd
@@ -7,20 +8,24 @@ import json
 import time
 
 # %%
+#URL da API
 url = '''https://glue-api.vivareal.com/v2/listings?addressCity=Curitiba&addressLocationId=BR%3EParana%3ENULL%3ECuritiba&addressNeighborhood=&addressState=Paran%C3%A1&addressCountry=Brasil&addressStreet=&addressZone=&addressPointLat=-25.437238&addressPointLon=-49.269973&business=SALE&facets=amenities&unitTypes=APARTMENT&unitSubTypes=UnitSubType_NONE,DUPLEX,LOFT,STUDIO,TRIPLEX&unitTypesV3=APARTMENT&usageTypes=RESIDENTIAL&listingType=USED&parentId=null&categoryPage=RESULT&includeFields=search(result(listings(listing(displayAddressType,amenities,usableAreas,constructionStatus,listingType,description,title,unitTypes,nonActivationReason,propertyType,unitSubTypes,id,portal,parkingSpaces,address,suites,publicationType,externalId,bathrooms,usageTypes,totalAreas,advertiserId,bedrooms,pricingInfos,showPrice,status,advertiserContact,videoTourLink,whatsappNumber,stamps),account(id,name,logoUrl,licenseNumber,showAddress,legacyVivarealId,phones),medias,accountLink,link)),totalCount),page,seasonalCampaigns,fullUriFragments,nearby(search(result(listings(listing(displayAddressType,amenities,usableAreas,constructionStatus,listingType,description,title,unitTypes,nonActivationReason,propertyType,unitSubTypes,id,portal,parkingSpaces,address,suites,publicationType,externalId,bathrooms,usageTypes,totalAreas,advertiserId,bedrooms,pricingInfos,showPrice,status,advertiserContact,videoTourLink,whatsappNumber,stamps),account(id,name,logoUrl,licenseNumber,showAddress,legacyVivarealId,phones),medias,accountLink,link)),totalCount)),expansion(search(result(listings(listing(displayAddressType,amenities,usableAreas,constructionStatus,listingType,description,title,unitTypes,nonActivationReason,propertyType,unitSubTypes,id,portal,parkingSpaces,address,suites,publicationType,externalId,bathrooms,usageTypes,totalAreas,advertiserId,bedrooms,pricingInfos,showPrice,status,advertiserContact,videoTourLink,whatsappNumber,stamps),account(id,name,logoUrl,licenseNumber,showAddress,legacyVivarealId,phones),medias,accountLink,link)),totalCount)),account(id,name,logoUrl,licenseNumber,showAddress,legacyVivarealId,phones,phones),developments(search(result(listings(listing(displayAddressType,amenities,usableAreas,constructionStatus,listingType,description,title,unitTypes,nonActivationReason,propertyType,unitSubTypes,id,portal,parkingSpaces,address,suites,publicationType,externalId,bathrooms,usageTypes,totalAreas,advertiserId,bedrooms,pricingInfos,showPrice,status,advertiserContact,videoTourLink,whatsappNumber,stamps),account(id,name,logoUrl,licenseNumber,showAddress,legacyVivarealId,phones),medias,accountLink,link)),totalCount)),owners(search(result(listings(listing(displayAddressType,amenities,usableAreas,constructionStatus,listingType,description,title,unitTypes,nonActivationReason,propertyType,unitSubTypes,id,portal,parkingSpaces,address,suites,publicationType,externalId,bathrooms,usageTypes,totalAreas,advertiserId,bedrooms,pricingInfos,showPrice,status,advertiserContact,videoTourLink,whatsappNumber,stamps),account(id,name,logoUrl,licenseNumber,showAddress,legacyVivarealId,phones),medias,accountLink,link)),totalCount))&size=300&from={}&q=&developmentsSize=5&__vt=&levels=CITY,UNIT_TYPE&ref=&pointRadius=&isPOIQuery='''
 
 #%%
 print(url)
 
 # %%
+#headers para a api permitir a consulta('finge' que é o vivareal consultando)
 headersList = {
  "Accept": "*/*",
  "User-Agent": "Thunder Client (https://www.thunderclient.com)",
  "x-domain": "www.vivareal.com.br" 
 }
-
+#config da consulta da api caso houver
 payload = ""
 # %%
+#funcao para consultar a api
+#O 'i' é a partir de qual id será feita a consulta
 def get_json(url, i, headersList, payload):
     ret = requests.request("GET", url.format(i), data=payload,  headers=headersList)
     soup = bs(ret.text, 'html.parser')
@@ -29,7 +34,7 @@ def get_json(url, i, headersList, payload):
 # %%
 get_json(url, 1, headersList, payload)
 # %%
-
+#gera df com as colunas para salvar a consulta da ap
 df = pd.DataFrame(
     columns=[
         'descricao',
@@ -49,10 +54,13 @@ df = pd.DataFrame(
 
 #%%
 #Raspando todas as paginas enquanto a quantidade não for igual a quantidade exibida na pagina
-
+#definir os paramentos fazer a consulta de todos os imoveis
 i = 0
 imovel_id = 0
 json_data = get_json(url, imovel_id, headersList, payload)
+
+#Faz o while para raspar os imoveis até que o retorno seja zerado
+#vai de 300 em 300 ids(size na api), mas só retorna 295 pq 5 são de anuncios.
 
 while len(json_data['search']['result']['listings']) > 0:
     qtd = len(json_data['search']['result']['listings'])
@@ -122,14 +130,14 @@ while len(json_data['search']['result']['listings']) > 0:
             weblink        
         ]                                                              
     
-    imovel_id = imovel_id + qtd
-    if imovel_id > 10000:
+    imovel_id = imovel_id + qtd #soma ao id a quantidade consultada
+    if imovel_id > 10000: #a api permite a consulta até o id 10.000 apenas
         break
-    time.sleep(2)
-    json_data = get_json(url, imovel_id, headersList, payload)
+    time.sleep(2) #intervalo entre as consultas
+    json_data = get_json(url, imovel_id, headersList, payload) #faz nova consulta a partir do id_imovel novo
 
 #%%
-df.to_csv('banco_de_imoveis.csv', sep = ";", index = False, )
+df.to_csv('banco_de_imoveis.csv', sep = ";", index = False, ) #exporta como csv o df
 # %%
 ####################
 ############Estudos sobre json
