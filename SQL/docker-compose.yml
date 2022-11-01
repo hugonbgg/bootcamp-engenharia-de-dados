@@ -22,3 +22,11 @@ services:
         - type: bind
           source: ./sql_data/data/
           target: /home/
+
+    bi:
+        image: 'metabase/metabase'
+        container_name: 'metabase_container'
+        ports: 
+            - "3000:3000"
+        links:
+            - db
