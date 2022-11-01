@@ -84,8 +84,7 @@ create view vw_song as (
 				"date"					
 				) as "artist_row"
 		from tb_artist as t1
-		order by t1.artist,t1."date", 
-		t1.song			
+		order by t1.song,t1."date"					
 		) select 
 				song,
 				"rank",
