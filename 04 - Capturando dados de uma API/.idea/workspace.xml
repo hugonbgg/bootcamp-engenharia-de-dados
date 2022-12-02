@@ -55,6 +55,7 @@
       <workItem from="1669906546204" duration="476000" />
       <workItem from="1669907043651" duration="595000" />
       <workItem from="1669924618781" duration="4460000" />
+      <workItem from="1669990477467" duration="7320000" />
     </task>
     <servers />
   </component>
@@ -73,6 +74,6 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/04___Capturando_dados_de_uma_API$ingestao.coverage" NAME="ingestao Coverage Results" MODIFIED="1669931882061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/04___Capturando_dados_de_uma_API$ingestao.coverage" NAME="ingestao Coverage Results" MODIFIED="1669998934339" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

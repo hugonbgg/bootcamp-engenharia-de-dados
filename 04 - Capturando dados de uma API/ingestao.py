@@ -1,4 +1,7 @@
+import json
 from abc import ABC, abstractmethod
+from typing import List
+
 import requests
 import logging
 import datetime
@@ -34,9 +37,6 @@ class DaySummaryApi(MercadoBitcoinApi):
         return f'{self.base_endpoint}/{self.coin}/{self.type}/{date.year}/{date.month}/{date.day}'
 
 
-# print(DaySummaryApi(coin='BTC').get_data(date=datetime.date(2022, 11, 1)))
-
-
 class TradesAPI(MercadoBitcoinApi):
     type = 'trades'
 
@@ -57,6 +57,46 @@ class TradesAPI(MercadoBitcoinApi):
         return endpoint
 
 
-print(TradesAPI(coin='BTC').get_data())
-print(TradesAPI(coin='BTC').get_data(date_from=datetime.datetime(2022, 11, 1)))
-print(TradesAPI(coin='BTC').get_data(date_from=datetime.datetime(2022, 10, 1), date_to=datetime.datetime(2022, 10, 10)))
+# print(DaySummaryApi(coin='BTC').get_data(date=datetime.date(2022, 11, 1)))
+# print(TradesAPI(coin='BTC').get_data())
+# print(TradesAPI(coin='BTC').get_data(date_from=datetime.datetime(2022, 11, 1)))
+# print(TradesAPI(coin='BTC').get_data(date_from=datetime.datetime(2022, 10, 1), date_to=datetime.datetime(2022, 10,
+# 10)))
+
+
+
+class DataTypeNotSupportedForIngestionException(Exception):
+    def __init__(self, data):
+        self.data = data
+        self.message = f'Data type {type(data)} is not supported for ingestion'
+        super().__init__(self.message)
+
+# Class que vai escrever(salvar) os dados
+class Datawriter:
+    def __init__(self, filename: str) -> None:
+        self.filename = filename
+
+    def _writerow(self, row: str) -> None:
+        with open(self.filename, 'a') as f:
+            f.write(row)
+
+    def write(self, data: [List, dict]):
+        if isinstance(data, dict):
+            self._writerow(json.dumps(data) + "\n")
+        elif isinstance(data, List):
+            for element in data:
+                self.write(element)
+        else:
+            raise DataTypeNotSupportedForIngestionException(data)
+
+
+
+day_summary = DaySummaryApi(coin='BTC').get_data(date=datetime.date(2022, 11, 1))
+dados = Datawriter('day_summary.json')
+dados.write(day_summary)
+
+trades = TradesAPI(coin='BTC').get_data()
+dados = Datawriter('trades.json')
+dados.write(trades)
+
+
